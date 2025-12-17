@@ -6,3 +6,4 @@ out
 dist
 *.pem
 .vercel
+.env*.local
