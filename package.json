@@ -8,13 +8,15 @@
     "start": "next start",
     "lint": "next lint",
     "generate-favicon": "node scripts/generate-favicon.js",
-    "clean-favicon": "node scripts/clean-favicons.js"
+    "clean-favicon": "node scripts/clean-favicons.js",
+    "vercel-build": "npm run generate-favicon && next build"
   },
   "dependencies": {
     "all": "^0.0.0",
     "next": "^14.0.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "vercel": "^50.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",
