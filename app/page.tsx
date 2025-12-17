@@ -6,6 +6,7 @@ import Image from "next/image";
 export default function Home() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +31,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-[#070526] w-full">
+      <header className="bg-[#070526] w-full relative">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
           <div className="flex items-center gap-1">
             <Image
@@ -61,17 +62,46 @@ export default function Home() {
           </div>
 
           {/* Mobile menu button */}
-          <button className="md:hidden p-2 text-white ml-auto">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+          <button 
+            className="md:hidden p-2 text-white ml-auto"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
           </button>
         </nav>
+
+        {/* Mobile Menu Dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-[#070526] border-t border-gray-700 z-50">
+            <div className="px-4 py-4 space-y-4">
+              <a href="#" className="block text-white hover:text-primary transition-colors font-medium py-2">Find Job</a>
+              <a href="#" className="block text-white hover:text-primary transition-colors font-medium py-2">Post a Job</a>
+              <a href="#" className="block text-white hover:text-primary transition-colors font-medium py-2">Companies</a>
+              <div className="flex flex-col gap-3 pt-4 border-t border-gray-700">
+                <button className="border border-primary text-white px-6 py-2 rounded-full hover:bg-primary hover:text-white transition-colors font-medium w-full">
+                  Register
+                </button>
+                <button className="bg-primary text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors font-medium w-full">
+                  Login
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Section */}
           <div className="flex flex-col justify-center">
             <div className="mb-8">
