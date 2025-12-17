@@ -1,0 +1,36 @@
+name: Generate Favicons
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  generate:
+    name: Generate and commit favicons
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate favicons
+        run: npm run generate-favicon
+
+      - name: Commit generated icons
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "chore: generate favicons"
+          add: "public/favicon.ico public/apple-touch-icon.png"
+          author_name: "github-actions[bot]"
+          author_email: "github-actions[bot]@users.noreply.github.com"
+          push: true
