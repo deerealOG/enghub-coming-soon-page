@@ -224,7 +224,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl blur-2xl"></div>
 
               {/* Main image with border */}
-              <div className="relative bg-white rounded-2xl p-2 shadow-2xl h-full">
+              <div className="relative  rounded-2xl p-2 h-full">
                 <img
                   src="/hero.svg"
                   alt="Engineer working"
