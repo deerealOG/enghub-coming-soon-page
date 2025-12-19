@@ -265,7 +265,7 @@ export default function Home() {
                 <div className="h-[1.2em] relative overflow-hidden mt-2">
                   <div 
                     className="transition-transform duration-700 ease-in-out absolute w-full"
-                    style={{ transform: `translateY(-${headlineIndex * 100}%)` }}
+                    style={{ transform: `translateY(-${headlineIndex * 1.2}em)` }}
                   >
                     {headlines.map((text) => (
                       <div key={text} className="text-gray-900 h-[1.2em] flex items-center">{text}.</div>
