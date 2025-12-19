@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 
@@ -10,6 +10,46 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [headlineIndex, setHeadlineIndex] = useState(0);
+  const headlines = ["Connect", "Collaborate", "Innovate", "Succeed"];
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeadlineIndex((prev) => (prev + 1) % headlines.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Don't close if clicking the toggle button
+      if (buttonRef.current && buttonRef.current.contains(event.target as Node)) {
+        return;
+      }
+      
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    if (mobileMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
+
+  const handleNavClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    setShowComingSoon(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,18 +91,88 @@ export default function Home() {
   };
 
   const features = [
-    { id: 1, text: "Connect with other engineers" },
-    { id: 2, text: "Get employed by top engineering firms" },
-    { id: 3, text: "Access professional Training Firms for Engineers" },
-    { id: 4, text: "Share your engineering contents, innovations, and research updates with the world" },
-    { id: 5, text: "Connect with top engineering firms" },
-    { id: 6, text: "Collaborate with other Engineering firms" },
-    { id: 7, text: "Be visible to the world" },
-    { id: 8, text: "Connect with local and international Engineering organizations" },
+    { 
+      id: 1, 
+      text: "Connect with other engineers",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+      )
+    },
+    { 
+      id: 2, 
+      text: "Get employed by top engineering firms",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      )
+    },
+    { 
+      id: 3, 
+      text: "Access professional Training Firms for Engineers",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.082.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+      )
+    },
+    { 
+      id: 4, 
+      text: "Share your engineering contents, innovations, and research updates with the world",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 2v6h6m-3 5H7m10 4H7m4-8H7" />
+        </svg>
+      )
+    },
+    { 
+      id: 5, 
+      text: "Connect with top engineering firms",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+      )
+    },
+    { 
+      id: 6, 
+      text: "Collaborate with other Engineering firms",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+      )
+    },
+    { 
+      id: 7, 
+      text: "Be visible to the world",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+      )
+    },
+    { 
+      id: 8, 
+      text: "Connect with local and international Engineering organizations",
+      icon: (
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h.272a2 2 0 011.39.586l.656.656c.428.428.428 1.12 0 1.548l-.328.328a2 2 0 01-1.414.586h-2.148a2 2 0 00-1.414.586l-.707.707a2 2 0 00-.586 1.414V17a2 2 0 01-2 2H7M11 22c5.523 0 10-4.477 10-10S16.523 2 11 2 1 6.477 1 12s4.477 10 10 10z" />
+        </svg>
+      )
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-white overflow-hidden">
+    <div className="min-h-screen bg-white overflow-hidden relative">
+      {/* Background Decor */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10 animate-float"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10 animate-float" style={{ animationDelay: '2s' }}></div>
       {/* Header */}
       <header className="bg-[#070526] w-full relative">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center">
@@ -72,31 +182,33 @@ export default function Home() {
               alt="Engineers Hub Logo"
               width={70}
               height={70}
+              className="w-12 h-12 md:w-[70px] md:h-[70px]"
             />
-            <div>
+            <div className="text-sm md:text-base">
               <div className="font-bold text-[#F37821]">Engineers</div>
               <div className="font-bold text-white">Hub</div>
             </div>
           </div>
 
           <div className="hidden md:flex flex-1 justify-center items-center gap-8">
-            <a href="#" className="text-white hover:text-primary transition-colors font-medium">Find Job</a>
-            <a href="#" className="text-white hover:text-primary transition-colors font-medium">Post a Job</a>
-            <a href="#" className="text-white hover:text-primary transition-colors font-medium">Companies</a>
+            <a href="#" onClick={handleNavClick} className="text-white hover:text-primary transition-colors font-medium">Find Job</a>
+            <a href="#" onClick={handleNavClick} className="text-white hover:text-primary transition-colors font-medium">Post a Job</a>
+            <a href="#" onClick={handleNavClick} className="text-white hover:text-primary transition-colors font-medium">Companies</a>
           </div>
 
           <div className="hidden md:flex items-center gap-4 ml-auto">
-            <button className="border border-primary text-white px-6 py-2 rounded-full hover:bg-primary hover:text-white transition-colors font-medium">
+            <button onClick={handleNavClick} className="border border-primary text-white px-6 py-2 rounded-full hover:bg-primary hover:text-white transition-colors font-medium">
               Register
             </button>
-            <button className="bg-primary text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors font-medium">
+            <button onClick={handleNavClick} className="bg-primary text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors font-medium">
               Login
             </button>
           </div>
 
           {/* Mobile menu button */}
           <button 
-            className="md:hidden p-2 text-white ml-auto"
+            ref={buttonRef}
+            className="md:hidden p-2 text-primary ml-auto"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -114,16 +226,16 @@ export default function Home() {
 
         {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-[#070526] border-t border-gray-700 z-50">
+          <div ref={menuRef} className="md:hidden absolute top-full left-0 right-0 bg-[#070526] border-t border-gray-700 z-50">
             <div className="px-4 py-4 space-y-4">
-              <a href="#" className="block text-white hover:text-primary transition-colors font-medium py-2">Find Job</a>
-              <a href="#" className="block text-white hover:text-primary transition-colors font-medium py-2">Post a Job</a>
-              <a href="#" className="block text-white hover:text-primary transition-colors font-medium py-2">Companies</a>
+              <a href="#" onClick={handleNavClick} className="block text-white hover:text-primary transition-colors font-medium py-2">Find Job</a>
+              <a href="#" onClick={handleNavClick} className="block text-white hover:text-primary transition-colors font-medium py-2">Post a Job</a>
+              <a href="#" onClick={handleNavClick} className="block text-white hover:text-primary transition-colors font-medium py-2">Companies</a>
               <div className="flex flex-col gap-3 pt-4 border-t border-gray-700">
-                <button className="border border-primary text-white px-6 py-2 rounded-full hover:bg-primary hover:text-white transition-colors font-medium w-full">
+                <button onClick={handleNavClick} className="border border-primary text-white px-6 py-2 rounded-full hover:bg-primary hover:text-white transition-colors font-medium w-full">
                   Register
                 </button>
-                <button className="bg-primary text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors font-medium w-full">
+                <button onClick={handleNavClick} className="bg-primary text-white px-6 py-2 rounded-full hover:bg-orange-600 transition-colors font-medium w-full">
                   Login
                 </button>
               </div>
@@ -137,12 +249,29 @@ export default function Home() {
         <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Section */}
           <div className="flex flex-col justify-center">
-            <div className="mb-8">
+            <div className="mb-8 animate-reveal">
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                Join 500+ engineers on the waitlist
+              </div>
               <p className="text-gray-600 text-lg mb-3">
                 Online Social Platform For Engineers.
               </p>
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-4 leading-tight">
                 Coming <span className="text-primary">Soon</span>
+                <div className="h-[1.2em] relative overflow-hidden mt-2">
+                  <div 
+                    className="transition-transform duration-700 ease-in-out absolute w-full"
+                    style={{ transform: `translateY(-${headlineIndex * 100}%)` }}
+                  >
+                    {headlines.map((text) => (
+                      <div key={text} className="text-gray-900 h-[1.2em] flex items-center">{text}.</div>
+                    ))}
+                  </div>
+                </div>
               </h1>
               <p className="text-gray-600 text-lg">
                 Be the first to know when we launch.
@@ -198,42 +327,51 @@ export default function Home() {
             </form>
 
             {/* Features Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-              {features.map((feature) => (
-                <div key={feature.id} className="flex items-start gap-3">
-                  <div className="text-primary flex-shrink-0 mt-1">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+              {features.map((feature, idx) => (
+                <div 
+                  key={feature.id} 
+                  className={`flex items-start gap-4 p-4 rounded-2xl bg-white/80 backdrop-blur-sm border border-gray-100 shadow-sm hover:shadow-md hover:border-primary/20 transition-all group animate-reveal`}
+                  style={{ animationDelay: `${(idx + 2) * 100}ms` }}
+                >
+                  <div className="text-primary flex-shrink-0 p-2 bg-primary/5 rounded-xl group-hover:bg-primary group-hover:text-white transition-colors">
+                    {feature.icon}
                   </div>
-                  <p className="text-gray-700 text-base leading-relaxed">{feature.text}</p>
+                  <p className="text-gray-700 text-sm md:text-base leading-relaxed font-medium">{feature.text}</p>
                 </div>
               ))}
             </div>
 
-            {/* Tagline */}
-            <p className="text-gray-900 font-semibold text-xl">
-              All engineers in one platform.
-            </p>
+            {/* Tagline card */}
+            <div className="bg-[#070526] text-white p-6 rounded-3xl inline-flex items-center gap-4 shadow-xl mb-6">
+              <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                </svg>
+              </div>
+              <p className="font-semibold text-lg md:text-xl">
+                All engineers in one platform.
+              </p>
+            </div>
           </div>
 
           {/* Right Section - Image */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-md h-96 lg:h-auto">
+          <div className="flex justify-center lg:justify-end animate-reveal" style={{ animationDelay: '400ms' }}>
+            <div className="relative w-full max-w-md h-96 lg:h-auto animate-float">
               {/* Background decorative elements */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl blur-2xl"></div>
-
+              
               {/* Main image with border */}
-              <div className="relative  rounded-2xl p-2 h-full">
+              <div className="relative rounded-2xl p-2 h-full">
                 <img
                   src="/hero.svg"
                   alt="Engineer working"
-                  className="w-full h-full rounded-xl object-cover"
+                  className="w-full h-full rounded-xl object-cover shadow-2xl relative z-10"
                 />
               </div>
 
               {/* Decorative secondary box */}
-              <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-primary/10 rounded-3xl -z-10"></div>
+              <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-primary/10 rounded-3xl -z-10 animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -265,6 +403,39 @@ export default function Home() {
           <p>&copy; 2025 Engineers Hub. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Coming Soon Modal */}
+      {showComingSoon && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowComingSoon(false)}
+          ></div>
+          <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center shadow-xl relative animate-in fade-in zoom-in duration-200 z-10">
+            <button 
+              onClick={() => setShowComingSoon(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 outline-none"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Coming Soon</h3>
+            <p className="text-gray-600 mb-6">We're working hard to get this feature ready for you. Stay tuned!</p>
+            <button 
+              onClick={() => setShowComingSoon(false)}
+              className="bg-primary text-white px-6 py-2 rounded-full font-medium hover:bg-orange-600 transition-colors w-full"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
