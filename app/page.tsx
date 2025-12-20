@@ -292,9 +292,7 @@ export default function Home() {
                   </div>
                 </div>
               </h1>
-              <p className="text-gray-600 text-lg">
-                Be the first to know when we launch.
-              </p>
+              
             </div>
 
             {/* Mobile Hero Image */}
@@ -304,6 +302,9 @@ export default function Home() {
 
             {/* Email Subscription */}
             <form onSubmit={handleSubmit} className="mb-10">
+              <p className="text-gray-600 mt-4 mb-2 text-lg">
+                Be the first to know when we launch.
+              </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="email"
