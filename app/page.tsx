@@ -4,6 +4,25 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 
+const HeroImage = () => (
+  <div className="relative w-full max-w-md h-96 lg:h-auto animate-float">
+    {/* Background decorative elements */}
+    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl blur-2xl"></div>
+    
+    {/* Main image with border */}
+    <div className="relative rounded-2xl p-2 h-full">
+      <img
+        src="/hero.svg"
+        alt="Engineer working"
+        className="w-full h-full rounded-xl object-cover shadow-2xl relative z-10"
+      />
+    </div>
+
+    {/* Decorative secondary box */}
+    <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-primary/10 rounded-3xl -z-10 animate-pulse"></div>
+  </div>
+);
+
 export default function Home() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -246,7 +265,7 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left Section */}
           <div className="flex flex-col justify-center">
             <div className="mb-8 animate-reveal">
@@ -276,6 +295,11 @@ export default function Home() {
               <p className="text-gray-600 text-lg">
                 Be the first to know when we launch.
               </p>
+            </div>
+
+            {/* Mobile Hero Image */}
+            <div className="flex justify-center lg:hidden mb-12 animate-reveal">
+              <HeroImage />
             </div>
 
             {/* Email Subscription */}
@@ -397,23 +421,8 @@ export default function Home() {
           </div>
 
           {/* Right Section - Image */}
-          <div className="flex justify-center lg:justify-end animate-reveal" style={{ animationDelay: '400ms' }}>
-            <div className="relative w-full max-w-md h-96 lg:h-auto animate-float">
-              {/* Background decorative elements */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl blur-2xl"></div>
-              
-              {/* Main image with border */}
-              <div className="relative rounded-2xl p-2 h-full">
-                <img
-                  src="/hero.svg"
-                  alt="Engineer working"
-                  className="w-full h-full rounded-xl object-cover shadow-2xl relative z-10"
-                />
-              </div>
-
-              {/* Decorative secondary box */}
-              <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-primary/10 rounded-3xl -z-10 animate-pulse"></div>
-            </div>
+          <div className="hidden lg:flex justify-end animate-reveal" style={{ animationDelay: '400ms' }}>
+            <HeroImage />
           </div>
         </div>
       </main>
